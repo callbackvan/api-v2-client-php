@@ -1,5 +1,9 @@
 # CallbackHunter APIv2 Client
 Официальный клиент для APIv2 CallbackHunter.
+### Status
+[![Build Status](https://travis-ci.org/callbackvan/api-v2-client-php.svg?branch=master)](https://travis-ci.org/callbackvan/api-v2-client-php)
+[![Coverage Status](https://coveralls.io/repos/github/callbackvan/api-v2-client-php/badge.svg)](https://coveralls.io/github/callbackvan/api-v2-client-php)
+
 
 Документацию по доступным методам можно найти по [ссылке](https://developers.callbackhunter.com)
 
@@ -9,7 +13,7 @@ _*Внимание!*_ API находится в стадии разработк�
 Для того, чтобы подключить библиотеку в свой проект, можно воспользоваться [composer](https://getcomposer.org)
 
 ```bash
-composer require callbackvan/api-v2-client-php
+composer require callbackhunter/apiv2client
 ```
 
 ## Usage
