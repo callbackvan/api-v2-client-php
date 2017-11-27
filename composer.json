@@ -1,0 +1,50 @@
+{
+  "name": "callbackhunter/apiv2client",
+  "type": "library",
+  "description": "Official client for APIv2 of CallbackHunter",
+  "homepage": "https://callbackhunter.com/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Valery Vargin",
+      "email": "VDVUGaD@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.6",
+    "guzzlehttp/guzzle": "^6.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.0",
+    "wimg/php-compatibility": "^8.0",
+    "satooshi/php-coveralls": "^1.0",
+    "squizlabs/php_codesniffer": "^3.1"
+  },
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  },
+  "autoload-dev": {
+    "classmap": [
+      "tests/"
+    ]
+  },
+  "scripts": {
+    "code-style-install": "\"./vendor/bin/phpcs\" --config-set installed_paths vendor/wimg/php-compatibility",
+    "code-style-check": "phpcs --standard=./phpcs.xml ./src",
+    "code-style-compatibility": "phpcs --standard=PHPCompatibility --runtime-set testVersion 5.6 ./src",
+    "code-style-fix": "phpcbf --standard=./phpcs.xml ./src",
+    "code-style": [
+      "@code-style-check",
+      "@code-style-compatibility"
+    ],
+    "test": "phpunit --configuration phpunit.xml",
+    "post-install-cmd": [
+      "@code-style-install"
+    ],
+    "post-update-cmd": [
+      "@code-style-install"
+    ]
+  }
+}
