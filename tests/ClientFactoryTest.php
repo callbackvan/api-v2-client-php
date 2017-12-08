@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vdvug_000
- * Date: 05.12.2017
- * Time: 16:51
- */
 
 namespace CallbackHunterAPIv2\Tests;
 

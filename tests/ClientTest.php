@@ -106,7 +106,8 @@ class ClientTest extends TestCase
             ->willReturn($response);
 
         $this->assertSame(
-            $response, $this->client->requestPost($path, $data, $query)
+            $response,
+            $this->client->requestPost($path, $data, $query)
         );
     }
 
@@ -163,7 +164,8 @@ class ClientTest extends TestCase
             ->willReturn($response);
 
         $this->assertSame(
-            $response, $this->client->uploadFile($path, $imageForUpload)
+            $response,
+            $this->client->uploadFile($path, $imageForUpload)
         );
     }
 
@@ -188,7 +190,8 @@ class ClientTest extends TestCase
             'Content-Type' => 'application/hal+json',
             'User-Agent'   => 'CallbackHunterAPIv2Client/'.Client::VERSION,
             'Accept'       => implode(
-                ',', [
+                ',',
+                [
                     'application/json',
                     'application/hal+json',
                     'application/problem+json',

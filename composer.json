@@ -39,6 +39,21 @@
       "@code-style-check",
       "@code-style-compatibility"
     ],
+    "tests-code-style-check": "phpcs --standard=./phpcs.xml ./tests",
+    "tests-code-style-compatibility": "phpcs --standard=PHPCompatibility --runtime-set testVersion 5.6 ./tests",
+    "tests-code-style-fix": "phpcbf --standard=./phpcs.xml ./tests",
+    "tests-code-style": [
+      "@tests-code-style-check",
+      "@tests-code-style-compatibility"
+    ],
+    "code-style-fix-all": [
+      "@code-style-fix",
+      "@tests-code-style-fix"
+    ],
+    "code-style-all": [
+      "@code-style",
+      "@tests-code-style"
+    ],
     "test": "phpunit --configuration phpunit.xml",
     "post-install-cmd": [
       "@code-style-install"
