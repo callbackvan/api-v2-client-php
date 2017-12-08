@@ -24,7 +24,7 @@ use CallbackHunterAPIv2\ValueObject\Credentials as CBHCredentials;
 use CallbackHunterAPIv2\Client as CBHClient;
 
 $credentials = new CBHCredentials($userId, $key);
-$client = new CBHClient($credentials, new \GuzzleHttp\Client);
+$client = new CBHClient(new \GuzzleHttp\Client, $credentials);
 $response = $client->requestGet('widgets');
 if ($response->getStatusCode() === 200) {
     $widgetsInfo = json_decode((string)$response->getBody(), true);
