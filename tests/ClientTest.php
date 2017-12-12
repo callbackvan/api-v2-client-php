@@ -184,6 +184,7 @@ class ClientTest extends TestCase
             RequestOptions::ALLOW_REDIRECTS => true,
             RequestOptions::CONNECT_TIMEOUT => 10,
             RequestOptions::TIMEOUT         => 60,
+            RequestOptions::HTTP_ERRORS     => false,
         ];
 
         $this->defaultHeaders = [

@@ -151,6 +151,7 @@ class Client implements ClientInterface
             ),
             RequestOptions::CONNECT_TIMEOUT => 10,
             RequestOptions::TIMEOUT         => 60,
+            RequestOptions::HTTP_ERRORS     => false,
         ];
 
         return array_replace($default, $options);
