@@ -55,7 +55,8 @@ class Client implements ClientInterface
             'get',
             $this->buildUri($path),
             $this->buildOptions(
-                $options, ['Content-Type' => self::CONTENT_TYPE]
+                $options,
+                ['Content-Type' => self::CONTENT_TYPE]
             )
         );
     }
@@ -81,7 +82,8 @@ class Client implements ClientInterface
             'post',
             $this->buildUri($path),
             $this->buildOptions(
-                $options, ['Content-Type' => self::CONTENT_TYPE]
+                $options,
+                ['Content-Type' => self::CONTENT_TYPE]
             )
         );
     }
