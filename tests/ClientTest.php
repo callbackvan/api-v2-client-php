@@ -99,7 +99,7 @@ class ClientTest extends TestCase
                     ] +
                     [
                         RequestOptions::QUERY => $query,
-                        RequestOptions::BODY  => json_encode($data),
+                        RequestOptions::JSON  => $data,
                     ]
                 )
             )
@@ -136,6 +136,9 @@ class ClientTest extends TestCase
             ->willReturn($imageStream);
 
         $response = $this->createMock(ResponseInterface::class);
+        $headers = $this->defaultHeaders;
+        unset($headers['Content-Type']);
+
         $this->guzzleClient
             ->expects($this->once())
             ->method('request')
@@ -145,10 +148,8 @@ class ClientTest extends TestCase
                 $this->equalTo(
                     $this->defaultOptions +
                     [
-                        RequestOptions::HEADERS => [
-                                'Content-Type' => 'multipart/form-data',
-                            ] +
-                            $this->defaultHeaders +
+                        RequestOptions::HEADERS =>
+                            $headers +
                             $credentials,
                     ] +
                     [
