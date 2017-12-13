@@ -9,7 +9,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class Client implements ClientInterface
 {
-    const VERSION = '0.1.0';
+    const VERSION = '0.2.0';
+    const CONTENT_TYPE = 'application/hal+json';
 
     /** @var string */
     private $baseUri = 'https://callbackhunter.com/api/v2/';
@@ -53,7 +54,9 @@ class Client implements ClientInterface
         return $this->client->request(
             'get',
             $this->buildUri($path),
-            $this->buildOptions($options)
+            $this->buildOptions(
+                $options, ['Content-Type' => self::CONTENT_TYPE]
+            )
         );
     }
 
@@ -70,14 +73,16 @@ class Client implements ClientInterface
     public function requestPost($path, array $data = [], array $query = [])
     {
         $options = [
-            RequestOptions::BODY  => json_encode($data),
+            RequestOptions::JSON => $data,
             RequestOptions::QUERY => $query,
         ];
 
         return $this->client->request(
             'post',
             $this->buildUri($path),
-            $this->buildOptions($options)
+            $this->buildOptions(
+                $options, ['Content-Type' => self::CONTENT_TYPE]
+            )
         );
     }
 
@@ -104,10 +109,7 @@ class Client implements ClientInterface
         return $this->client->request(
             'post',
             $this->buildUri($path),
-            $this->buildOptions(
-                $options,
-                ['Content-Type' => 'multipart/form-data']
-            )
+            $this->buildOptions($options)
         );
     }
 
@@ -130,7 +132,6 @@ class Client implements ClientInterface
     private function buildOptions(array $options, array $headers = [])
     {
         $defaultHeaders = [
-            'Content-Type' => 'application/hal+json',
             'User-Agent'   => 'CallbackHunterAPIv2Client/'.self::VERSION,
             'Accept'       => implode(
                 ',',
