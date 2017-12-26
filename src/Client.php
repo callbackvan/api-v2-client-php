@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class Client implements ClientInterface
 {
-    const VERSION = '0.2.0';
+    const VERSION = '1.0.1';
     const CONTENT_TYPE = 'application/hal+json';
 
     /** @var string */
@@ -152,8 +152,6 @@ class Client implements ClientInterface
                 $this->credentials->getHeaders(),
                 $headers
             ),
-            RequestOptions::CONNECT_TIMEOUT => 10,
-            RequestOptions::TIMEOUT         => 60,
             RequestOptions::HTTP_ERRORS     => false,
         ];
 

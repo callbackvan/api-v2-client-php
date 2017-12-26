@@ -183,8 +183,6 @@ class ClientTest extends TestCase
 
         $this->defaultOptions = [
             RequestOptions::ALLOW_REDIRECTS => true,
-            RequestOptions::CONNECT_TIMEOUT => 10,
-            RequestOptions::TIMEOUT         => 60,
             RequestOptions::HTTP_ERRORS     => false,
         ];
 
