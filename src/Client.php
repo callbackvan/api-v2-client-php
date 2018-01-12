@@ -9,11 +9,12 @@ use Psr\Http\Message\ResponseInterface;
 
 class Client implements ClientInterface
 {
-    const VERSION = '1.0.1';
+    const VERSION = '1.0.2';
+    const BASE_URI = 'https://callbackhunter.com/api/v2/';
     const CONTENT_TYPE = 'application/hal+json';
 
     /** @var string */
-    private $baseUri = 'https://callbackhunter.com/api/v2/';
+    private $baseUri = self::BASE_URI;
 
     /** @var \GuzzleHttp\ClientInterface */
     private $client;
@@ -122,7 +123,12 @@ class Client implements ClientInterface
      */
     private function buildUri($path)
     {
-        return $this->baseUri.trim($path, '/');
+        $result = $path;
+        if (!$this->client->getConfig('base_uri')) {
+            $result = $this->baseUri.trim($path, '/');
+        }
+
+        return $result;
     }
 
     /**
