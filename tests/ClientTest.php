@@ -25,12 +25,15 @@ class ClientTest extends TestCase
     private $defaultHeaders;
 
     /**
-     * @covers \CallbackHunterAPIv2\Client::__construct
-     * @covers \CallbackHunterAPIv2\Client::requestGet
-     * @covers \CallbackHunterAPIv2\Client::buildUri
-     * @covers \CallbackHunterAPIv2\Client::buildOptions
+     * @covers       \CallbackHunterAPIv2\Client::__construct
+     * @covers       \CallbackHunterAPIv2\Client::requestGet
+     * @covers       \CallbackHunterAPIv2\Client::buildUri
+     * @covers       \CallbackHunterAPIv2\Client::buildOptions
+     * @dataProvider baseUriProvider
+     *
+     * @param string $baseUri
      */
-    public function testRequestGet()
+    public function testRequestGet($baseUri)
     {
         $credentials = $this->prepareCredentials();
 
@@ -40,13 +43,15 @@ class ClientTest extends TestCase
             'of'   => 'query',
         ];
 
+        $this->expectClientCheckBaseUri($baseUri);
+
         $response = $this->createMock(ResponseInterface::class);
         $this->guzzleClient
             ->expects($this->once())
             ->method('request')
             ->with(
                 $this->equalTo('get'),
-                $this->equalTo('https://callbackhunter.com/api/v2/'.$path),
+                $this->equalTo($this->buildPath($baseUri, $path)),
                 $this->equalTo(
                     $this->defaultOptions +
                     [
@@ -64,12 +69,15 @@ class ClientTest extends TestCase
     }
 
     /**
-     * @covers \CallbackHunterAPIv2\Client::__construct
-     * @covers \CallbackHunterAPIv2\Client::requestPost
-     * @covers \CallbackHunterAPIv2\Client::buildUri
-     * @covers \CallbackHunterAPIv2\Client::buildOptions
+     * @covers       \CallbackHunterAPIv2\Client::__construct
+     * @covers       \CallbackHunterAPIv2\Client::requestPost
+     * @covers       \CallbackHunterAPIv2\Client::buildUri
+     * @covers       \CallbackHunterAPIv2\Client::buildOptions
+     * @dataProvider baseUriProvider
+     *
+     * @param string $baseUri
      */
-    public function testRequestPost()
+    public function testRequestPost($baseUri)
     {
         $credentials = $this->prepareCredentials();
 
@@ -84,13 +92,15 @@ class ClientTest extends TestCase
             'way' => 'first',
         ];
 
+        $this->expectClientCheckBaseUri($baseUri);
+
         $response = $this->createMock(ResponseInterface::class);
         $this->guzzleClient
             ->expects($this->once())
             ->method('request')
             ->with(
                 $this->equalTo('post'),
-                $this->equalTo('https://callbackhunter.com/api/v2/'.$path),
+                $this->equalTo($this->buildPath($baseUri, $path)),
                 $this->equalTo(
                     $this->defaultOptions +
                     [
@@ -112,12 +122,15 @@ class ClientTest extends TestCase
     }
 
     /**
-     * @covers \CallbackHunterAPIv2\Client::__construct
-     * @covers \CallbackHunterAPIv2\Client::uploadFile
-     * @covers \CallbackHunterAPIv2\Client::buildUri
-     * @covers \CallbackHunterAPIv2\Client::buildOptions
+     * @covers       \CallbackHunterAPIv2\Client::__construct
+     * @covers       \CallbackHunterAPIv2\Client::uploadFile
+     * @covers       \CallbackHunterAPIv2\Client::buildUri
+     * @covers       \CallbackHunterAPIv2\Client::buildOptions
+     * @dataProvider baseUriProvider
+     *
+     * @param string $baseUri
      */
-    public function testUploadImage()
+    public function testUploadImage($baseUri)
     {
         $credentials = $this->prepareCredentials();
 
@@ -135,6 +148,8 @@ class ClientTest extends TestCase
             ->method('getStream')
             ->willReturn($imageStream);
 
+        $this->expectClientCheckBaseUri($baseUri);
+
         $response = $this->createMock(ResponseInterface::class);
         $headers = $this->defaultHeaders;
         unset($headers['Content-Type']);
@@ -144,7 +159,7 @@ class ClientTest extends TestCase
             ->method('request')
             ->with(
                 $this->equalTo('post'),
-                $this->equalTo('https://callbackhunter.com/api/v2/'.$path),
+                $this->equalTo($this->buildPath($baseUri, $path)),
                 $this->equalTo(
                     $this->defaultOptions +
                     [
@@ -168,6 +183,14 @@ class ClientTest extends TestCase
             $response,
             $this->client->uploadFile($path, $imageForUpload)
         );
+    }
+
+    public function baseUriProvider()
+    {
+        return [
+            [Client::BASE_URI],
+            ['http://example.com'],
+        ];
     }
 
     /**
@@ -215,5 +238,30 @@ class ClientTest extends TestCase
             ->willReturn($credentials);
 
         return $credentials;
+    }
+
+    /**
+     * Ожидание, что будет проверка на то, что base_uri же установлен
+     *
+     * @param string $baseUri
+     */
+    private function expectClientCheckBaseUri($baseUri)
+    {
+        $this->guzzleClient
+            ->expects($this->once())
+            ->method('getConfig')
+            ->with('base_uri')
+            ->willReturn($baseUri === Client::BASE_URI ? null : $baseUri);
+    }
+
+    /**
+     * @param string $baseUri
+     * @param string $path
+     *
+     * @return string
+     */
+    private function buildPath($baseUri, $path)
+    {
+        return $baseUri === Client::BASE_URI ? $baseUri.$path : $path;
     }
 }
