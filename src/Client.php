@@ -123,9 +123,9 @@ class Client implements ClientInterface
      */
     private function buildUri($path)
     {
-        $result = $path;
+        $result = trim($path, '/');
         if (!$this->client->getConfig('base_uri')) {
-            $result = $this->baseUri.trim($path, '/');
+            $result = $this->baseUri.$result;
         }
 
         return $result;
