@@ -29,9 +29,12 @@ interface ClientInterface
     /**
      * @param string                 $path
      * @param FileForUploadInterface $image
+     * @param array [$data = []]
      *
      * @return ResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function uploadFile($path, FileForUploadInterface $image);
+    public function uploadFile($path, FileForUploadInterface $image,
+        array $data = []
+    );
 }

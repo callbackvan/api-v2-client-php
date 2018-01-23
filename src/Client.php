@@ -75,7 +75,7 @@ class Client implements ClientInterface
     public function requestPost($path, array $data = [], array $query = [])
     {
         $options = [
-            RequestOptions::JSON => $data,
+            RequestOptions::JSON  => $data,
             RequestOptions::QUERY => $query,
         ];
 
@@ -94,12 +94,16 @@ class Client implements ClientInterface
      *
      * @param string                 $path
      * @param FileForUploadInterface $image
+     * @param array                  [$data = []]
      *
      * @return ResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function uploadFile($path, FileForUploadInterface $image)
-    {
+    public function uploadFile(
+        $path,
+        FileForUploadInterface $image,
+        array $data = []
+    ) {
         $options = [
             RequestOptions::MULTIPART => [
                 [
@@ -108,6 +112,12 @@ class Client implements ClientInterface
                 ],
             ],
         ];
+        foreach ($data as $key => $value) {
+            $options[RequestOptions::MULTIPART][] = [
+                'name'     => $key,
+                'contents' => $value,
+            ];
+        }
 
         return $this->client->request(
             'post',
@@ -140,8 +150,8 @@ class Client implements ClientInterface
     private function buildOptions(array $options, array $headers = [])
     {
         $defaultHeaders = [
-            'User-Agent'   => 'CallbackHunterAPIv2Client/'.self::VERSION,
-            'Accept'       => implode(
+            'User-Agent' => 'CallbackHunterAPIv2Client/'.self::VERSION,
+            'Accept'     => implode(
                 ',',
                 [
                     'application/json',
