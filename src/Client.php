@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class Client implements ClientInterface
 {
-    const VERSION = '1.0.2';
+    const VERSION = '1.0.4';
     const BASE_URI = 'https://callbackhunter.com/api/v2/';
     const CONTENT_TYPE = 'application/hal+json';
 

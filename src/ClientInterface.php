@@ -34,7 +34,9 @@ interface ClientInterface
      * @return ResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function uploadFile($path, FileForUploadInterface $image,
+    public function uploadFile(
+        $path,
+        FileForUploadInterface $image,
         array $data = []
     );
 }
