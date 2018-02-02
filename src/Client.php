@@ -112,12 +112,11 @@ class Client implements ClientInterface
                 ],
             ],
         ];
-        foreach ($data as $key => $value) {
-            $options[RequestOptions::MULTIPART][] = [
-                'name'     => $key,
-                'contents' => $value,
-            ];
-        }
+
+        $options[RequestOptions::MULTIPART][] = [
+            'name'     => 'data',
+            'contents' => json_encode($data),
+        ];
 
         return $this->client->request(
             'post',

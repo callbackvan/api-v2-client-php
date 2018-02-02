@@ -145,12 +145,8 @@ class ClientTest extends TestCase
         ];
         $additionalDataMultiPart = [
             [
-                'name'     => 'foo',
-                'contents' => $additionalData['foo'],
-            ],
-            [
-                'name'     => 'baz',
-                'contents' => $additionalData['baz'],
+                'name'     => 'data',
+                'contents' => json_encode($additionalData),
             ],
         ];
 
