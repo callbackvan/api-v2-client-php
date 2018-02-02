@@ -32,6 +32,8 @@ class ClientTest extends TestCase
      * @dataProvider baseUriProvider
      *
      * @param string $baseUri
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function testRequestGet($baseUri)
     {
@@ -76,6 +78,8 @@ class ClientTest extends TestCase
      * @dataProvider baseUriProvider
      *
      * @param string $baseUri
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function testRequestPost($baseUri)
     {
@@ -129,10 +133,22 @@ class ClientTest extends TestCase
      * @dataProvider baseUriProvider
      *
      * @param string $baseUri
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function testUploadImage($baseUri)
     {
         $credentials = $this->prepareCredentials();
+        $additionalData = [
+            'foo' => 'bar',
+            'baz' => 12,
+        ];
+        $additionalDataMultiPart = [
+            [
+                'name'     => 'data',
+                'contents' => json_encode($additionalData),
+            ],
+        ];
 
         $path = 'test';
 
@@ -168,12 +184,16 @@ class ClientTest extends TestCase
                             $credentials,
                     ] +
                     [
-                        RequestOptions::MULTIPART => [
-                            [
-                                'name'     => $imageName,
-                                'contents' => $imageStream,
-                            ],
-                        ],
+                        RequestOptions::MULTIPART =>
+                            array_merge(
+                                [
+                                    [
+                                        'name'     => $imageName,
+                                        'contents' => $imageStream,
+                                    ],
+                                ],
+                                $additionalDataMultiPart
+                            ),
                     ]
                 )
             )
@@ -181,7 +201,7 @@ class ClientTest extends TestCase
 
         $this->assertSame(
             $response,
-            $this->client->uploadFile($path, $imageForUpload)
+            $this->client->uploadFile($path, $imageForUpload, $additionalData)
         );
     }
 

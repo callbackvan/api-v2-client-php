@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class Client implements ClientInterface
 {
-    const VERSION = '1.0.2';
+    const VERSION = '1.0.4';
     const BASE_URI = 'https://callbackhunter.com/api/v2/';
     const CONTENT_TYPE = 'application/hal+json';
 
@@ -75,7 +75,7 @@ class Client implements ClientInterface
     public function requestPost($path, array $data = [], array $query = [])
     {
         $options = [
-            RequestOptions::JSON => $data,
+            RequestOptions::JSON  => $data,
             RequestOptions::QUERY => $query,
         ];
 
@@ -94,12 +94,16 @@ class Client implements ClientInterface
      *
      * @param string                 $path
      * @param FileForUploadInterface $image
+     * @param array                  [$data = []]
      *
      * @return ResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function uploadFile($path, FileForUploadInterface $image)
-    {
+    public function uploadFile(
+        $path,
+        FileForUploadInterface $image,
+        array $data = []
+    ) {
         $options = [
             RequestOptions::MULTIPART => [
                 [
@@ -107,6 +111,11 @@ class Client implements ClientInterface
                     'contents' => $image->getStream(),
                 ],
             ],
+        ];
+
+        $options[RequestOptions::MULTIPART][] = [
+            'name'     => 'data',
+            'contents' => json_encode($data),
         ];
 
         return $this->client->request(
@@ -140,8 +149,8 @@ class Client implements ClientInterface
     private function buildOptions(array $options, array $headers = [])
     {
         $defaultHeaders = [
-            'User-Agent'   => 'CallbackHunterAPIv2Client/'.self::VERSION,
-            'Accept'       => implode(
+            'User-Agent' => 'CallbackHunterAPIv2Client/'.self::VERSION,
+            'Accept'     => implode(
                 ',',
                 [
                     'application/json',
