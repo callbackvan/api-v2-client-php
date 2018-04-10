@@ -5,6 +5,7 @@ namespace CallbackHunterAPIv2\Tests;
 use CallbackHunterAPIv2\Client;
 use CallbackHunterAPIv2\ClientFactory;
 use CallbackHunterAPIv2\ValueObject\Credentials;
+use CallbackHunterAPIv2\ValueObject\CredentialsSAP;
 use PHPUnit\Framework\TestCase;
 
 class ClientFactoryTest extends TestCase
@@ -23,6 +24,20 @@ class ClientFactoryTest extends TestCase
 
         $expected = new Client(new \GuzzleHttp\Client, $credentials);
         $result = $this->factory->makeWithAPICredentials($userId, $APIKey);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @covers \CallbackHunterAPIv2\ClientFactory::makeWithSAPCredentials
+     */
+    public function testMakeWithSAPCredentials()
+    {
+        $token = 'test';
+        $credentials = new CredentialsSAP($token);
+
+        $expected = new Client(new \GuzzleHttp\Client, $credentials);
+        $result = $this->factory->makeWithSAPCredentials($token);
 
         $this->assertEquals($expected, $result);
     }
